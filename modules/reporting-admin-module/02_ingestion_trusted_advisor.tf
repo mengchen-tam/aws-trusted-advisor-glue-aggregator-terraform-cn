@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "ta_lambda_role_policy" {
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
     resources = [
-      "arn:aws:iam::${local.admin_account_id}:role/${var.admin_account_role_name}"
+      "arn:aws-cn:iam::${local.admin_account_id}:role/${var.admin_account_role_name}"
     ]
   }
 }
@@ -48,10 +48,10 @@ resource "aws_iam_role" "ta_lambda_execution_role" {
 # define what this role allow to do
 resource "aws_iam_role_policy_attachment" "ta_lambda_role_managed_policies" {
   for_each = toset([
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",    # write logs to CLoudWatch Logs
-    "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess",                    # upload traces to XRay
-    "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy", # Permission to write runtime metrics to CloudWatch Lambda Insights
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"  # Allow to read SQS queue (and be invoked)
+    "arn:aws-cn:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",    # write logs to CLoudWatch Logs
+    "arn:aws-cn:iam::aws:policy/AWSXRayDaemonWriteAccess",                    # upload traces to XRay
+    "arn:aws-cn:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy", # Permission to write runtime metrics to CloudWatch Lambda Insights
+    "arn:aws-cn:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"  # Allow to read SQS queue (and be invoked)
   ])
   role       = aws_iam_role.ta_lambda_execution_role.name
   policy_arn = each.key

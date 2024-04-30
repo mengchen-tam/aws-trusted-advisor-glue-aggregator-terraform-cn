@@ -53,9 +53,9 @@ class FetchTrustedAdvisorEntries(AbstractFetcher):
 
         logger.info(f"Getting Trusted Advisor checks for account: {member_account_id}")
 
-        admin_role_arn = f"arn:aws:iam::{current_account_id}:role/{self.admin_role_name}" # assumption: this lambda run in the OU admin account
-        member_role_arn = f"arn:aws:iam::{member_account_id}:role/{self.member_role_name}"
-        support_client = self._new_client("support", "us-east-1", admin_role_arn, member_role_arn) # trusted advisor is a global service, AWS recommend to access via us-east-1
+        admin_role_arn = f"arn:aws-cn:iam::{current_account_id}:role/{self.admin_role_name}" # assumption: this lambda run in the OU admin account
+        member_role_arn = f"arn:aws-cn:iam::{member_account_id}:role/{self.member_role_name}"
+        support_client = self._new_client("support", "cn-north-1", admin_role_arn, member_role_arn) # trusted advisor is a global service, AWS recommend to access via us-east-1
         
         checks = self._get_checks(support_client)
         array_of_checks_output = self._get_all_checks_results(checks, member_account_id, support_client)

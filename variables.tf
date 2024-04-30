@@ -1,7 +1,7 @@
 variable "region" {
   description = "AWS Region in which resource are deployed in"
   type        = string
-  default     = "eu-west-1"
+  default     = "cn-north-1"
 }
 
 variable "profile" {

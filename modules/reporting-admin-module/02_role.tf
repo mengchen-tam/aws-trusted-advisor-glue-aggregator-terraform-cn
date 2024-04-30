@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "assume_role" {
 data "aws_iam_policy_document" "inline_policy" {
   statement {
     actions   = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::*:role/${var.member_account_role_name}"]
+    resources = ["arn:aws-cn:iam::*:role/${var.member_account_role_name}"]
   }
 }
 

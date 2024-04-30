@@ -40,9 +40,9 @@ resource "aws_iam_role" "acc_meta_lambda_execution_role" {
 # define what this role allow to do
 resource "aws_iam_role_policy_attachment" "acc_meta_lambda_role_managed_policies" {
   for_each = toset([
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",   # write logs to CLoudWatch Logs
-    "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess",                   # upload traces to XRay
-    "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy" # Permission to write runtime metrics to CloudWatch Lambda Insights.
+    "arn:aws-cn:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",   # write logs to CLoudWatch Logs
+    "arn:aws-cn:iam::aws:policy/AWSXRayDaemonWriteAccess",                   # upload traces to XRay
+    "arn:aws-cn:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy" # Permission to write runtime metrics to CloudWatch Lambda Insights.
   ])
   role       = aws_iam_role.acc_meta_lambda_execution_role.name
   policy_arn = each.key

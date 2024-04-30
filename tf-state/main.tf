@@ -1,10 +1,10 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "cn-north-1"
 }
 
 module "terraform_state" {
   source             = "../modules/s3-module/"
-  region             = "eu-west-1"
+  region             = "cn-north-1"
   s3_bucket_name     = "reporting-tfstate-bucket"
   versioning_enabled = true
 }

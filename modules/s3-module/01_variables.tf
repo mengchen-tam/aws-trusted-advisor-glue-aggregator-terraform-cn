@@ -1,6 +1,6 @@
 variable "region" {
   description = "Default Region for Cloud Analytics Platform"
-  default     = "eu-west-1"
+  default     = "cn-north-1"
 }
 
 variable "s3_bucket_name" {
