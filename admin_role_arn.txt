@@ -1,0 +1,1 @@
+arn:aws-cn:iam::189101866359:role/qwky9q-AdminAccountRole

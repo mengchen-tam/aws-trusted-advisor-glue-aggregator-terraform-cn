@@ -9,6 +9,7 @@ locals {
   lambda_alias_name        = "LIVE"
   admin_account_role_name  = "${local.name_prefix}AdminAccountRole"  # include path prefix without starting /
   member_account_role_name = "${local.name_prefix}MemberAccountRole" # include path prefix without starting /
+
 }
 
 
@@ -24,15 +25,21 @@ module "reporting-admin-standalone" {
   member_account_role_name           = local.member_account_role_name
 }
 
+data "terraform_remote_state" "admin_state" {
+  backend = "local"
+  config = {
+    path = "${path.module}/terraform.tfstate"
+  }
+}
 
 module "reporting-member-standalone" {
-  depends_on = [
-    module.reporting-admin-standalone
-  ]
+  # depends_on = [
+  #   module.reporting-admin-standalone
+  # ]
   source                   = "./modules/reporting-member-single-module"
   custom_tags              = local.tags
   name_prefix              = local.name_prefix
-  admin_account_role_arn   = module.reporting-admin-standalone.admin_role_arn
+  admin_account_role_arn   = data.terraform_remote_state.admin_state.outputs.admin_role_arn
   member_account_role_name = local.member_account_role_name
 }
 
@@ -48,11 +55,22 @@ output "admin_s3_arn" {
   value = module.reporting-admin-standalone.s3_arn
 }
 
-output "member_account_id" {
-  value = module.reporting-member-standalone.account_id
+# output "member_account_id" {
+#   value = module.reporting-member-standalone.account_id
+# }
+
+# output "member_region_name" {
+#   value = module.reporting-member-standalone.region_name
+# }
+
+output "admin_role_arn" {
+  value = module.reporting-admin-standalone.admin_role_arn
 }
 
-output "member_region_name" {
-  value = module.reporting-member-standalone.region_name
+output "member_role_name" {
+  value = local.member_account_role_name
 }
 
+output "name_prefix" {
+  value = local.name_prefix
+}

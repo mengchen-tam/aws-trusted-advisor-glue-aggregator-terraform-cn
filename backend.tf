@@ -1,7 +1,7 @@
 terraform {
-  backend "s3" {
-    encrypt = true
-  }
+  # backend "s3" {
+  #   encrypt = true
+  # }
   required_providers {
     random = {
       source  = "hashicorp/random"

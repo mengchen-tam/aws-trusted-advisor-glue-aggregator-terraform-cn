@@ -3,10 +3,10 @@ resource "aws_s3_bucket" "this" {
   tags   = var.tags_s3
 }
 
-resource "aws_s3_bucket_acl" "this" {
-  bucket = var.s3_bucket_name
-  acl    = var.s3_bucket_acl
-}
+# #resource "aws_s3_bucket_acl" "this" {
+#   bucket = var.s3_bucket_name
+#   #acl    = var.s3_bucket_acl
+# }
 
 resource "aws_s3_bucket_versioning" "this" {
   bucket = var.s3_bucket_name
