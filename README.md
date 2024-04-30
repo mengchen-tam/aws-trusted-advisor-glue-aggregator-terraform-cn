@@ -60,7 +60,7 @@ AWS Business Support or AWS Enterprise Support subscription is required to use t
 
 ## Dependencies
 
-* **terraform**: 1.2.7 [Reference](https://github.com/hashicorp/terraform)
+* **terraform**: 1.7.5 [Reference](https://github.com/hashicorp/terraform)
 
 ## Use
 
@@ -81,7 +81,7 @@ Alternatively, if you have [Terraform](https://www.terraform.io/) installed on y
 
 ```bash
 export AWS_PROFILE=<profile>
-export AWS_DEFAULT_REGION=eu-west-1
+export AWS_DEFAULT_REGION=cn-north-1
 
 terraform plan -target=module.reporting-admin-module -var region=$AWS_DEFAULT_REGION -var profile=$AWS_PROFILE
 terraform apply -target=module.reporting-admin-module -var region=$AWS_DEFAULT_REGION -var profile=$AWS_PROFILE
