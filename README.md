@@ -4,6 +4,12 @@ Code to deploy a solution to:
 - periodically aggregate the Trusted Advisor results from different accounts to a centralised account, using AWS Lambda, AWS IAM, Amazon S3 and Amazon SQS 
 - run analysis or report SQL queries on the aggregated data, using Amazon Athena, AWS Glue, Amazon S3
 
+ ## CN-REGION branch
+Please switch the branch for cn-region deployment, this is only for test and demo purpose
+```bash
+git checkout cn-region-branch
+```
+
  ## Table of Contents
 
 - [Description](#description)
