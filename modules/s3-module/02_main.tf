@@ -1,12 +1,9 @@
 resource "aws_s3_bucket" "this" {
   bucket = var.s3_bucket_name
   tags   = var.tags_s3
-  lifecycle {
-            # Any Terraform plan that includes a destroy of this resource will
-            # result in an error message.
-            #
-            prevent_destroy = true
-        }
+  #with force_destroy, all objects will be deleted.
+  #if you want to keep the objects, you can change the force_destroy to false.
+  force_destroy = true
 }
 
 # #resource "aws_s3_bucket_acl" "this" {
