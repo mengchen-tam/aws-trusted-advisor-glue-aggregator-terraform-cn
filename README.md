@@ -50,7 +50,8 @@ terraform apply -target=module.reporting-member-standalone -var profile=member
 
 5.	在admin account里修改lambda: xxx-fetch-accounts-metadata里面的accounts。也可在部署前修改modules/reporting-admin-module/src/lambda/functions/fetch_trusted_advisor/fetch_trusted_advisor.py  
 
-```def process_event(self, event, context):
+```python
+def process_event(self, event, context):
 
         accounts = []
 
@@ -66,8 +67,63 @@ terraform apply -target=module.reporting-member-standalone -var profile=member
 
 7. 最后就可以在S3 或者Athena里面去查询结果，或者集成athena到BI工具上用于展示。
 
-8.  目前这个结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
+8.  目前这个检查结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
 
+9. result的json raw格式示例如下, 可以在report S3中或者Glue table中查看
+```json
+{
+    "id": "H7IgTzjTYb",
+    "name": "Amazon EBS Snapshots",
+    "description": "Checks the age of the snapshots for your Amazon Elastic Block Store (Amazon EBS) volumes (available or in-use). Even though Amazon EBS volumes are replicated, failures can occur. Snapshots are persisted to Amazon Simple Storage Service (Amazon S3) for durable storage and point-in-time recovery.<br><br><h4 class='headerBodyStyle'>Alert Criteria</h4><br>Yellow: The most recent volume snapshot is between 7 and 30 days old.<br>Red: The most recent volume snapshot is more than 30 days old.<br>Red: The volume does not have a snapshot.<br><br><h4 class='headerBodyStyle'>Recommended Action</h4><br>Create weekly or monthly snapshots of your volumes. For more information, see <a href=\"http://docs.amazonaws.cn/en_us/AWSEC2/latest/UserGuide/ebs-creating-snapshot.html\" target=\"_blank\">Creating an Amazon EBS Snapshot</a>.<br><br><h4 class='headerBodyStyle'>Additional Resources</h4><br><a href=\"http://docs.amazonaws.cn/en_us/AWSEC2/latest/UserGuide/AmazonEBS.html\" target=\"_blank\">Amazon Elastic Block Store (Amazon EBS)</a>",
+    "category": "fault_tolerance",
+    "metadata": [
+        "Region",
+        "Volume ID",
+        "Volume Name",
+        "Snapshot ID",
+        "Snapshot Name",
+        "Snapshot Age",
+        "Volume Attachment",
+        "Status",
+        "Reason"
+    ],
+    "account_id": "xxxxxxxxxxxxx",
+    "result": {
+        "checkId": "H7IgTzjTYb",
+        "timestamp": "2024-04-28T06:31:24Z",
+        "status": "error",
+        "resourcesSummary": {
+            "resourcesProcessed": 12,
+            "resourcesFlagged": 12,
+            "resourcesIgnored": 0,
+            "resourcesSuppressed": 0
+        },
+        "categorySpecificSummary": {
+            "costOptimizing": {
+                "estimatedMonthlySavings": 0.0,
+                "estimatedPercentMonthlySavings": 0.0
+            }
+        },
+        "flaggedResources": [
+            {
+                "status": "error",
+                "region": "cn-north-1",
+                "resourceId": "xxxxxxxxxxxxxxxxxx",
+                "isSuppressed": false,
+                "metadata": [
+                    "cn-north-1",
+                    "vol-xxxxxxxxxxx",
+                    "test-project",
+                    "snap-0ea35d24f6b3423423",
+                    null,
+                    "302",
+                    "/dev/xvda:i-08097856b324234322",
+                    "Red",
+                    "Age"
+                ]
+            },
+...
+```
 
 # aws-trusted-advisor-glue-aggregator
 
