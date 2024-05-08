@@ -2,7 +2,8 @@
 本方案主要由2个模块，下文简称admin模块和member模块。这两个模块会分开部署。
 本方案中最重要的元素是两个部署在**admin模块里的lambda**，一个是**fetch-accounts-metadata**用于获取账号并触发SQS的Lambda，这里account id目前是hard code在脚本里的。客户可以提前修改或者部署以后修改。
 这个lambda有2种触发方式：
-1. terrafrom部署的scheduler,默认是3天触发一次。可以在aws-trusted-advisor-glue-aggregator-terraform/main.tf里修改
+1. terrafrom部署的scheduler, Amazon EventBridge > Rules > xxx-refresh-data-required-event
+   默认是3天触发一次。可以在aws-trusted-advisor-glue-aggregator-terraform/main.tf里修改参数：
 ```data_ingestion_schedule_expression：
 module "reporting-admin-standalone" {
   source                             = "./modules/reporting-admin-module"
@@ -15,7 +16,7 @@ module "reporting-admin-standalone" {
 
 其次就是**fetch-trusted-advisor**这个lambda，用于获取Member accounts report的lambda，会被SQS触发。这个lambda会使用admin_role去assume member_role, 然后使用trusted-advisor API 拿回查询结果。
 
-Report获取完成之后会将结果写到S3桶里，同时也会创建一个glue table和Athena query，按照部署步骤完成以后即可看到结果。
+Report获取完成之后会将结果写到S3桶里，同时也会创建一个glue table和Athena query，按照以下部署步骤完成以后即可看到结果。
 
 # Deployment guide in Chinese
 1.	下载并切换branch
@@ -32,13 +33,12 @@ aws_secret_access_key = <sk>
 aws_access_key_id = <ak>
 aws_secret_access_key = <sk>
 ```
-4.	开始部署admin账号中的资源
+3.	开始部署admin模块中的资源
 ```
 terraform apply -target=module.reporting-admin-standalone --profile=admin
 ```
-5. 部署好之后检查一下资源部署情况，主要就是admin_role_arn，以及两个lambda
-6. 
-6.	然后部署member account的role，这一步只是用admin_role_arn作为principle去在member account里部署一个role。
+
+4. 部署member模块: 这一步只是用admin_role_arn作为principle去在member account里部署一个role。
 ```
 terraform apply -target=module.reporting-member-standalone -var profile=member
 ```
@@ -48,7 +48,7 @@ terraform apply -target=module.reporting-member-standalone -var profile=member
 "support:DescribeTrustedAdvisorCheckResult"
 ```
 
-7.	在admin account里修改lambda: xxx-fetch-accounts-metadata里面的accounts。也可在部署前修改modules/reporting-admin-module/src/lambda/functions/fetch_trusted_advisor/fetch_trusted_advisor.py  
+5.	在admin account里修改lambda: xxx-fetch-accounts-metadata里面的accounts。也可在部署前修改modules/reporting-admin-module/src/lambda/functions/fetch_trusted_advisor/fetch_trusted_advisor.py  
 
 ```def process_event(self, event, context):
 
@@ -61,9 +61,9 @@ terraform apply -target=module.reporting-member-standalone -var profile=member
         accounts.append('111222333444')
 ```
 这里可以根据自己情况，将account list贴入，也可以用其他方式，比如使用organizations list-accounts API去获取。
-8. 手工触发lambda: xxx-fetch-accounts-metadata, 点击test
-9. 最后就可以在S3 或者Athena里面去查询结果，或者集成athena到BI工具上用于展示。
-10. 目前这个结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
+6. 手工触发lambda: xxx-fetch-accounts-metadata, 点击test
+7. 最后就可以在S3 或者Athena里面去查询结果，或者集成athena到BI工具上用于展示。
+8.  目前这个结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
 
 # aws-trusted-advisor-glue-aggregator
 
