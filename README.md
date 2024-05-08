@@ -35,7 +35,7 @@ aws_secret_access_key = <sk>
 ```
 3.	开始部署admin模块中的资源
 ```
-terraform apply -target=module.reporting-admin-standalone --profile=admin
+terraform apply -target=module.reporting-admin-standalone -var profile=admin
 ```
 
 4. 部署member模块: 这一步只是用admin_role_arn作为principle去在member account里部署一个role。
