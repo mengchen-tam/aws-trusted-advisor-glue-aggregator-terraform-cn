@@ -61,9 +61,13 @@ terraform apply -target=module.reporting-member-standalone -var profile=member
         accounts.append('111222333444')
 ```
 这里可以根据自己情况，将account list贴入，也可以用其他方式，比如使用organizations list-accounts API去获取。
+
 6. 手工触发lambda: xxx-fetch-accounts-metadata, 点击test
+
 7. 最后就可以在S3 或者Athena里面去查询结果，或者集成athena到BI工具上用于展示。
+
 8.  目前这个结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
+
 
 # aws-trusted-advisor-glue-aggregator
 
