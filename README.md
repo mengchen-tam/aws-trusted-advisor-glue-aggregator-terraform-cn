@@ -67,9 +67,10 @@ def process_event(self, event, context):
 
 7. 最后就可以在S3 或者Athena里面去查询结果，或者集成athena到BI工具上用于展示。
 
-8.  目前这个检查结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
+8. 目前这个检查结果只有一个result字段，将所有属于某个account某个check-id的检查结果保存进去。如需和BI集成还需要做一些查询或者ETL的工作。
+   可以参考blog: [使用 AWS Glue DataBrew 和 Amazon QuickSight 简化半结构化嵌套 JSON 数据分析 ](https://aws.amazon.com/blogs/big-data/simplify-semi-structured-nested-json-data-analysis-with-aws-glue-databrew-and-amazon-quicksight/)
 
-9. result的json raw格式示例如下, 可以在report S3中或者Glue table中查看
+10. result的json raw格式示例如下, 可以在report S3中或者Glue table中查看
 ```json
 {
     "id": "H7IgTzjTYb",
